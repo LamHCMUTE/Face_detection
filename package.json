@@ -9,10 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@mui/material": "^5.11.13",
+    "@mui/x-data-grid": "^6.0.2",
     "@types/node": "18.15.3",
     "@types/react": "18.0.28",
     "@types/react-dom": "18.0.11",
+    "lib": "^5.0.1",
     "next": "13.2.4",
+    "next-auth": "^4.20.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "typescript": "5.0.2"
