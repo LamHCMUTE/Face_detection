@@ -1,89 +1,51 @@
 import React, { useEffect, useState } from 'react';
-// import { LoginLayout, MainLayout } from '../../components';
 import { CircularProgress, IconButton, InputBase, Paper, Stack, Typography } from '@mui/material';
+// import BoxFrom from '@/components/login/box-right-form';
+// import BoxQRCode from '@/components/login/box-left-qrcode';
 import { useRouter } from 'next/router';
-
-import PermIdentityIcon from '@mui/icons-material/PermIdentity';
+// import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import NextDoubleIcon from '@/images/account/next_double.svg';
 import Image from 'next/image';
-
-import LoginComp from '@/components/login';
-// import BoxFromMobile from '@/components/login-mobile';
-// import { DarkLightState } from '@/redux/dark-light';
-import { useSelector } from 'react-redux';
-import { LoginLayout } from '@/components/common/layout/login';
 import { useTranslation } from '@/hooks/translate-hook';
-import { authApi } from '@/api-client/auth-api';
-import { DarkLightState } from '@/store/dark-light';
 
-export interface ILoginPageProps {}
+export interface ILoginCompProps {
+    handleChangePass: any;
+    loading: boolean;
+    error: string;
+    setUser: any;
+    user: string;
+}
 
-function LoginPage(props: ILoginPageProps) {
+export default function LoginComp({
+    handleChangePass,
+    loading,
+    error,
+    setUser,
+    user,
+}: ILoginCompProps) {
     const router = useRouter();
     const { translate } = useTranslation();
-    const [loading, setLoading] = useState(false);
-    const [user, setUser] = useState('');
-    const [error, setError] = useState('');
     const [forgotPass, setForgotPass] = useState(false);
-    const checkEmail = (email: string) => {
-        const re =
-            /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return re.test(String(email).toLowerCase());
-    };
-    const handleChangePass = async () => {
-        setLoading(true);
-        const checkPhone = /((0|84)+([0-9]{9})\b)/g;
-        if (!user) {
-            setError(translate('emptyUser'));
-        } else if (!checkEmail(user) && !checkPhone.test(user)) {
-            setError('Email hoặc số điện thoại không đúng định dạng');
-        } else {
-            if (checkEmail(user)) {
-                const payLoad = {
-                    Email: user,
-                    Phone: '',
-                };
-                await authApi.forgotPassword(payLoad).then(() => {
-                    router.push('/');
-                });
-            } else {
-                const payLoad = {
-                    Email: '',
-                    Phone: user,
-                };
-                await authApi.forgotPassword(payLoad).then(() => {
-                    router.push('/');
-                });
-            }
-        }
-        setLoading(false);
-    };
-    const darkModes: DarkLightState = useSelector((state: any) => {
-        return state.setDarkMode.darkMode;
+    const [darkModes, setDarkModes] = useState();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        setDarkModes(window.localStorage.darkLine);
     });
     return (
-        <Stack sx={{ height: '100%', justifyContent: 'center' }}>
-            <Stack display={{ xs: 'none', md: 'flex' }}>
-                <LoginComp
-                    handleChangePass={handleChangePass}
-                    loading={loading}
-                    error={error}
-                    setUser={setUser}
-                    user={user}
-                />
-            </Stack>
+        <Stack justifyContent={'center'} alignItems={'center'}>
             {forgotPass ? (
                 <Stack
                     sx={{
-                        width: '100%',
-                        height: '100%',
+                        width: '100vw',
+                        height: '100vh',
                         justifyContent: 'center',
                         alignItems: 'center',
                     }}
                 >
                     <Stack
                         sx={{
-                            width: { xs: '90%', sm: '500px' },
+                            width: '500px',
                             background: darkModes ? 'rgba(44, 62, 76, 0.3)' : '#D9D9D950',
                             boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
                             borderRadius: '10px',
@@ -116,7 +78,7 @@ function LoginPage(props: ILoginPageProps) {
                                     fontWeight: darkModes ? '300' : '700',
                                     fontStyle: 'italic',
                                     mb: 3,
-                                    width: { xs: '80%', sm: '400px' },
+                                    width: '400px',
                                     textAlign: 'center',
                                 }}
                             >
@@ -129,7 +91,7 @@ function LoginPage(props: ILoginPageProps) {
                                         p: '2px 4px',
                                         display: 'flex',
                                         alignItems: 'center',
-                                        width: { xs: '100%', sm: '400px' },
+                                        width: 300,
                                         borderRadius: '30px',
                                         height: '40px',
                                     }}
@@ -139,7 +101,7 @@ function LoginPage(props: ILoginPageProps) {
                                         aria-label="menu"
                                         disabled={true}
                                     >
-                                        <PermIdentityIcon />
+                                        {/* <PermIdentityIcon /> */}
                                     </IconButton>
                                     <InputBase
                                         value={user}
@@ -161,13 +123,15 @@ function LoginPage(props: ILoginPageProps) {
                                         width: '40px',
                                         borderRadius: '100%',
                                         height: '40px',
-
+                                        bgcolor: '#030E16',
                                         border: 'none',
-
+                                        color: '#fff',
                                         fontSize: '13px',
                                         fontWeight: '700',
                                         '&:hover': {
+                                            bgcolor: '#030E16',
                                             border: 'none',
+                                            color: '#fff',
                                         },
                                         ml: 1,
                                         justifyContent: 'center',
@@ -207,21 +171,95 @@ function LoginPage(props: ILoginPageProps) {
                     </Stack>
                 </Stack>
             ) : (
-                <Stack
-                    // sx={{
-                    //     width: '100%',
-                    //     height: '100vh',
-                    //     justifyContent: 'center',
-                    //     alignItems: 'center',
-                    // }}
-                    display={{ xs: 'flex', md: 'none' }}
-                >
-                    {/* <BoxFromMobile setForgotPass={setForgotPass} /> */}
+                <Stack>
+                    <Stack
+                        direction={'row'}
+                        spacing={3}
+                        justifyContent={'center'}
+                        alignItems={'center'}
+                    >
+                        {/* <BoxQRCode /> */}
+                        <Stack justifyContent={'center'} alignItems={'center'}>
+                            <Stack
+                                sx={{
+                                    height: '180px',
+                                    width: '1px',
+                                    bgcolor: darkModes ? '#fff' : '#D9D9D9',
+                                }}
+                            ></Stack>
+                            <Typography
+                                mt={2}
+                                variant="subtitle1"
+                                gutterBottom
+                                sx={{
+                                    color: darkModes ? '#fff' : '#000',
+                                    fontSize: '12px',
+                                    fontWeight: '300',
+                                }}
+                            >
+                                {translate('or')}
+                            </Typography>
+                            <Stack
+                                sx={{
+                                    height: '180px',
+                                    width: '1px',
+                                    bgcolor: darkModes ? '#fff' : '#D9D9D9',
+                                }}
+                            ></Stack>
+                        </Stack>
+                        {/* <BoxFrom setForgotPass={setForgotPass} /> */}
+                    </Stack>
+                    <Stack sx={{ alignItems: 'center' }}>
+                        <Stack
+                            sx={{
+                                width: '700px',
+                                height: '80px',
+                                background: darkModes ? 'rgba(44, 62, 76, 0.3)' : '#D9D9D950',
+                                boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+                                borderRadius: '10px',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                mt: 7,
+                            }}
+                        >
+                            <Typography
+                                mt={2}
+                                variant="subtitle1"
+                                sx={{
+                                    color: darkModes ? '#fff' : '#000',
+                                    fontSize: '12px',
+                                    fontWeight: '300',
+                                    textAlign: 'center',
+                                }}
+                            >
+                                <span
+                                    style={{
+                                        fontWeight: 'bold',
+                                        fontSize: '13px',
+                                        cursor: 'pointer',
+                                    }}
+                                >
+                                    {translate('loginSixth')}
+                                </span>{' '}
+                                {translate('loginSeventh')}
+                            </Typography>
+                            <Typography
+                                variant="subtitle1"
+                                gutterBottom
+                                sx={{
+                                    color: darkModes ? '#fff' : '#000',
+                                    fontSize: '13px',
+                                    fontWeight: 'bold',
+                                    cursor: 'pointer',
+                                }}
+                                onClick={() => router.push('/register')}
+                            >
+                                {translate('register')}
+                            </Typography>
+                        </Stack>
+                    </Stack>
                 </Stack>
             )}
         </Stack>
     );
 }
-
-LoginPage.Layout = LoginLayout;
-export default LoginPage;

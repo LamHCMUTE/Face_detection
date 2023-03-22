@@ -15,7 +15,7 @@ const login_page=()=>{
     const router = useRouter()
     const handleClick=()=>{
         console.log('lam')
-        router.push("/")
+        router.push("/home")
     }
       return (
         <Stack sx={{ width: {xs: "100%"}, alignItems: "center"}}>
