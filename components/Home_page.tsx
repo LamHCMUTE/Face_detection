@@ -1,5 +1,5 @@
 import { authApi } from "@/api-client/auth-api";
-import { Button } from "@mui/material";
+import { Button, Stack } from "@mui/material";
 import { useRouter } from "next/router";
 
 export interface IHomePageProps {
@@ -28,6 +28,10 @@ export default function HomePage(props:IHomePageProps){
         }
     };
     return(
-        <Button onClick={handleLogin}>Dang nhap</Button>
+        <Stack flexDirection={'column'}>
+            <Button onClick={handleLogin}>Dang nhap</Button>
+
+            
+        </Stack>
     )
 }

@@ -18,14 +18,14 @@ export default function Home() {
   
   return (
     <Stack sx={{ overflowY: "scroll", height: "100vh" }}>
-      <HomePage  
+      {/* <HomePage  
         setLoading={(val: any) => {
           setLoading(val);
           }}
         isTransparent={isTransparent}
-      />
-      {/* <Sidebar/> */}
+      /> */}
+      <Sidebar/>
     </Stack>
-    
+   
   );
 }
