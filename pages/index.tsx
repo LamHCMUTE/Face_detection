@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { Button, Stack } from "@mui/material";
 import HomePage from "@/components/Home_page";
 import { useState } from "react";
+import Login from "./login";
 
 
 
@@ -24,7 +25,8 @@ export default function Home() {
           }}
         isTransparent={isTransparent}
       /> */}
-      <Sidebar/>
+      {/* <Sidebar/> */}
+      <Login/>
     </Stack>
    
   );
